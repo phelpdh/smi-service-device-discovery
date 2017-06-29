@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.dell.isg.smi.adapter.chassis.IChassisAdapter;
-import com.dell.isg.smi.adapter.server.IServerAdapter;
+import com.dell.isg.smi.adapter.server.inventory.IInventoryAdapter;
 import com.dell.isg.smi.adapter.server.model.WsmanCredentials;
 import com.dell.isg.smi.common.protocol.command.cmc.entity.ChassisCMCViewEntity;
 import com.dell.isg.smi.common.protocol.command.cmc.entity.RacadmCredentials;
@@ -19,16 +19,14 @@ import com.dell.isg.smi.commons.model.device.discovery.DiscoveryDeviceStatus;
 import com.dell.isg.smi.commons.model.device.discovery.DiscoveryDeviceTypeEnum;
 import com.dell.isg.smi.commons.model.device.discovery.config.DeviceDefaultCredential;
 import com.dell.isg.smi.commons.model.device.discovery.config.DeviceType;
-import com.dell.isg.smi.commons.model.server.inventory.HwSystem;
 import com.dell.isg.smi.service.device.discovery.config.DiscoveryDeviceConfigProvider;
 import com.dell.isg.smi.service.device.discovery.manager.threads.RequestScopeDiscoveryCredential;
 import com.dell.isg.smi.service.server.inventory.Transformer.TranformerUtil;
-import com.dell.isg.smi.wsman.command.entity.DCIMSystemViewType;
 
 @Component
 public class ExtractDeviceSummaryUtil {
 
-    private static IServerAdapter serverAdapterImpl;
+    private static IInventoryAdapter inventoryAdapterImpl;
 
     private static IChassisAdapter chassisAdapterImpl;
 
@@ -92,14 +90,11 @@ public class ExtractDeviceSummaryUtil {
             password = credential.getPassword();
         }
         WsmanCredentials wsmanCredential = new WsmanCredentials(discoverDeviceInfo.getIpAddress(), user, password);
-        DCIMSystemViewType system = serverAdapterImpl.collectSystemInfo(wsmanCredential);
+        Object system = inventoryAdapterImpl.collectSummary(wsmanCredential);
         if (system == null) {
             throw new Exception();
         }
-        HwSystem summary = new HwSystem();
-        summary.setId(discoverDeviceInfo.getIpAddress());
-        TranformerUtil.transformServerSummary(system, summary);
-        discoverDeviceInfo.setSummary(summary);
+        discoverDeviceInfo.setSummary(system);
         discoverDeviceInfo.setStatus(DiscoveryDeviceStatus.SUCCESS.getValue());
     }
 
@@ -127,13 +122,13 @@ public class ExtractDeviceSummaryUtil {
 
 
     @Autowired(required = true)
-    public void setIServerAdapter(IServerAdapter serverAdapterImpl) {
-        ExtractDeviceSummaryUtil.serverAdapterImpl = serverAdapterImpl;
+    public void setIInventoryAdapter(IInventoryAdapter inventoryAdapterImpl) {
+        ExtractDeviceSummaryUtil.inventoryAdapterImpl = inventoryAdapterImpl;
     }
 
 
-    public static IServerAdapter getIServerAdapter() {
-        return serverAdapterImpl;
+    public static IInventoryAdapter getIInventoryAdapter() {
+        return inventoryAdapterImpl;
     }
 
 
