@@ -1,5 +1,7 @@
 ### smi-service-device-discovery
 
+Copyright © 2017 Dell Inc. or its subsidiaries. All Rights Reserved.
+
 ### Purpose
 
 Given an IP Range and credentials, the service attemps to connect to each IP address to try and identify and retrieve basic summary information for all devices within the range. It is written primarily for finding Dell devices, but may identify a few others in the datacenter as well.  It is a stateless (12 factor app) that returns a JSON summary response.
@@ -9,7 +11,7 @@ This microservice can be used by itself, or as one piece of a larger discovery a
 
 ### How to Use
 
-Under Construction. Docker container not yet published on DockerHub..... 
+A docker container for this service is available at: https://hub.docker.com/r/rackhd/device-discovery/
 
 #### Startup
 Standalone, with no configuration settings provided:
@@ -241,6 +243,20 @@ VM:
 	VCENTER
 ~~~
 ---
+
+#### Licensing
+Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Source code for this microservice is available in repositories at https://github.com/RackHD.  
+
+The microservice makes use of dependent Jar libraries that may be covered by other licenses. In order to comply with the requirements of applicable licenses, the source for dependent libraries used by this microservice is available for download at:  https://bintray.com/rackhd/binary/download_file?file_path=smi-service-device-discovery-dependency-sources-devel.zip
+
+Additionally the binary and source jars for all dependent libraries are available for download on Maven Central.
+
+RackHD is a Trademark of Dell EMC
+
 
 ### Support
 Slack Channel: codecommunity.slack.com
